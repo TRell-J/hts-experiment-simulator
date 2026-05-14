@@ -434,7 +434,13 @@ st.markdown(f"""
 <div class="hero">
   <div class="hero-row">
     <div class="brand">
-      <div class="brand-mark">HJ</div>
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3.5 17.5 C 7 14, 11 11.5, 16 10" stroke="#06222A" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="1 2.2" opacity="0.55"/>
+          <path d="M21 3 L3 11.2 L10 13 L11.7 20 Z" fill="#06222A"/>
+          <path d="M10 13 L21 3" stroke="#06222A" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+        </svg>
+      </div>
       <div>
         <div class="brand-title">HTS Media · Experiment Simulator</div>
         <div class="brand-sub">A/B test sizing &nbsp;·&nbsp; revenue impact &nbsp;·&nbsp; hypothesis design</div>
@@ -462,7 +468,12 @@ PRESETS = {
 with st.sidebar:
     st.markdown(f"""
     <div class="sidebar-brand">
-      <div class="sidebar-brand-mark">HJ</div>
+      <div class="sidebar-brand-mark">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M21 3 L3 11.2 L10 13 L11.7 20 Z" fill="#06222A"/>
+          <path d="M10 13 L21 3" stroke="#06222A" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+        </svg>
+      </div>
       <div class="sidebar-brand-text">HTS Media</div>
     </div>
     """, unsafe_allow_html=True)
