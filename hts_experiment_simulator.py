@@ -56,7 +56,7 @@ st.markdown(f"""
     }}
     .block-container {{
         padding-top: 1.4rem !important;
-        padding-bottom: 4rem !important;
+        padding-bottom: 7rem !important;
         max-width: 1400px;
     }}
 
@@ -164,6 +164,49 @@ st.markdown(f"""
         transition: border-color 160ms ease, transform 160ms ease;
     }}
     .card:hover {{ border-color: {BORDER_HI}; }}
+
+    /* Input group head (no surrounding card — heading + sub above inputs) */
+    .group-head {{
+        margin: 4px 0 14px 0;
+    }}
+    .group-title {{
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: {TEXT};
+        letter-spacing: -0.01em;
+    }}
+    .group-sub {{
+        font-size: 0.8rem;
+        color: {TEXT_MUTED};
+        margin-top: 3px;
+    }}
+
+    /* Chart head (above each plotly chart) */
+    .chart-head {{ margin: 2px 0 10px 0; }}
+    .chart-head-row {{
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+    }}
+    .chart-title {{
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: {TEXT};
+        letter-spacing: -0.01em;
+    }}
+    .chart-eyebrow {{
+        font-size: 0.7rem;
+        color: {TEXT_MUTED};
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 600;
+    }}
+    .chart-sub {{
+        font-size: 0.8rem;
+        color: {TEXT_MUTED};
+        margin-top: 3px;
+    }}
 
     /* KPI metric containers ───────────────────────────────────── */
     div[data-testid="stMetric"] {{
@@ -451,25 +494,27 @@ st.markdown('<div class="section-header"><div class="section-title">Inputs</div>
 col1, col2 = st.columns(2, gap="large")
 
 with col1:
-    with st.container():
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown(f'<div style="font-size:0.95rem;font-weight:700;color:{TEXT};margin-bottom:2px;">Experiment parameters</div>', unsafe_allow_html=True)
-        st.markdown(f'<div style="font-size:0.8rem;color:{TEXT_MUTED};margin-bottom:18px;">Statistical setup for the test</div>', unsafe_allow_html=True)
-        baseline_rate = st.slider("Baseline conversion / attach rate", 0.01, 0.80, float(p["baseline"]), 0.01, format="%.2f")
-        mde           = st.slider("Minimum detectable effect (MDE)",   0.005, 0.20, float(p["mde"]),      0.005, format="%.3f")
-        confidence    = st.select_slider("Confidence level",  options=[0.90, 0.95, 0.99], value=p["confidence"])
-        power         = st.select_slider("Statistical power", options=[0.70, 0.80, 0.90], value=p["power"])
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="group-head">
+      <div class="group-title">Experiment parameters</div>
+      <div class="group-sub">Statistical setup for the test</div>
+    </div>
+    """, unsafe_allow_html=True)
+    baseline_rate = st.slider("Baseline conversion / attach rate", 0.01, 0.80, float(p["baseline"]), 0.01, format="%.2f")
+    mde           = st.slider("Minimum detectable effect (MDE)",   0.005, 0.20, float(p["mde"]),      0.005, format="%.3f")
+    confidence    = st.select_slider("Confidence level",  options=[0.90, 0.95, 0.99], value=p["confidence"])
+    power         = st.select_slider("Statistical power", options=[0.70, 0.80, 0.90], value=p["power"])
 
 with col2:
-    with st.container():
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown(f'<div style="font-size:0.95rem;font-weight:700;color:{TEXT};margin-bottom:2px;">Traffic &amp; revenue context</div>', unsafe_allow_html=True)
-        st.markdown(f'<div style="font-size:0.8rem;color:{TEXT_MUTED};margin-bottom:18px;">Volume and unit economics</div>', unsafe_allow_html=True)
-        daily_traffic = st.number_input("Daily users eligible for test",      100, 500_000, int(p["daily_traffic"]), 500)
-        avg_rev       = st.number_input("Avg revenue per conversion ($)",     0.50, 500.0,  float(p["avg_revenue"]), 0.50)
-        test_split    = st.slider("Traffic split — control / variant",        0.3, 0.7, 0.5, 0.05)
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="group-head">
+      <div class="group-title">Traffic &amp; revenue context</div>
+      <div class="group-sub">Volume and unit economics</div>
+    </div>
+    """, unsafe_allow_html=True)
+    daily_traffic = st.number_input("Daily users eligible for test",      100, 500_000, int(p["daily_traffic"]), 500)
+    avg_rev       = st.number_input("Avg revenue per conversion ($)",     0.50, 500.0,  float(p["avg_revenue"]), 0.50)
+    test_split    = st.slider("Traffic split — control / variant",        0.3, 0.7, 0.5, 0.05)
 
 # ── Calculations ───────────────────────────────────────────────────────────────
 def calc_n(base, effect, conf, pwr):
@@ -527,13 +572,14 @@ PLOTLY_CONFIG = {"displaylogo": False, "modeBarButtonsToRemove": ["lasso2d", "se
 v1, v2 = st.columns(2, gap="large")
 
 with v1:
-    st.markdown('<div class="card" style="padding-bottom:8px;">', unsafe_allow_html=True)
     st.markdown(f"""
-    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">
-      <div style="font-size:0.95rem;font-weight:700;color:{TEXT};">Power curve</div>
-      <div style="font-size:0.72rem;color:{TEXT_MUTED};letter-spacing:0.04em;">Duration vs. MDE</div>
+    <div class="chart-head">
+      <div class="chart-head-row">
+        <div class="chart-title">Power curve</div>
+        <div class="chart-eyebrow">Duration vs. MDE</div>
+      </div>
+      <div class="chart-sub">Smaller effects need more samples — see where your MDE lands.</div>
     </div>
-    <div style="font-size:0.8rem;color:{TEXT_MUTED};margin-bottom:14px;">Smaller effects need more samples — see where your MDE lands.</div>
     """, unsafe_allow_html=True)
 
     mde_range = np.linspace(max(0.005, mde * 0.2), mde * 3, 80)
@@ -561,16 +607,16 @@ with v1:
     fig1.update_xaxes(title_text="Minimum detectable effect (%)", **AXIS_STYLE)
     fig1.update_yaxes(title_text="Test duration (days)", **AXIS_STYLE)
     st.plotly_chart(fig1, use_container_width=True, config=PLOTLY_CONFIG)
-    st.markdown('</div>', unsafe_allow_html=True)
 
 with v2:
-    st.markdown('<div class="card" style="padding-bottom:8px;">', unsafe_allow_html=True)
     st.markdown(f"""
-    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">
-      <div style="font-size:0.95rem;font-weight:700;color:{TEXT};">Cumulative revenue</div>
-      <div style="font-size:0.72rem;color:{TEXT_MUTED};letter-spacing:0.04em;">Control vs. variant</div>
+    <div class="chart-head">
+      <div class="chart-head-row">
+        <div class="chart-title">Cumulative revenue</div>
+        <div class="chart-eyebrow">Control vs. variant</div>
+      </div>
+      <div class="chart-sub">Projected revenue paths over the test window.</div>
     </div>
-    <div style="font-size:0.8rem;color:{TEXT_MUTED};margin-bottom:14px;">Projected revenue paths over the test window.</div>
     """, unsafe_allow_html=True)
 
     days   = list(range(1, min(dur * 2, 90) + 1))
@@ -611,7 +657,6 @@ with v2:
     fig2.update_xaxes(title_text="Days", **AXIS_STYLE)
     fig2.update_yaxes(title_text="Cumulative revenue ($)", **AXIS_STYLE)
     st.plotly_chart(fig2, use_container_width=True, config=PLOTLY_CONFIG)
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # ── Recommendation ─────────────────────────────────────────────────────────────
 st.markdown("<div style='height:28px;'></div>", unsafe_allow_html=True)
