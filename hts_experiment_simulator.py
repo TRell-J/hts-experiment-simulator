@@ -47,12 +47,12 @@ st.markdown(f"""
         -webkit-font-smoothing: antialiased;
     }}
 
-    /* Hide the default Streamlit chrome a bit */
+    /* Hide the default Streamlit chrome a bit — scoped narrowly to avoid
+       hiding any future <footer> element that may wrap app content. */
     #MainMenu {{ visibility: hidden; }}
-    footer {{ visibility: hidden; }}
+    footer[class*="viewerBadge"], div[class*="viewerBadge"] {{ visibility: hidden; }}
     header[data-testid="stHeader"] {{
         background: transparent;
-        height: 0;
     }}
     .block-container {{
         padding-top: 1.4rem !important;
